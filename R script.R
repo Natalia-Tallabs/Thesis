@@ -15,7 +15,7 @@ survey_data <- mydata[c("cntry_y", "reg_iso", "size_5c",
 View(survey_data) #still with NA 
 
 survey_mexico <- subset(survey_data, cntry_y == "Mexico (2018)")
-#Only Mexico observation
+#Only Mexico observations
 survey_mexico_clean<- na.omit(survey_mexico, cols = "X052")
 
 # Check the levels and labels of variables of interest
@@ -321,3 +321,30 @@ ggplot(results, aes(x = actual, y = predicted, color = factor(sector))) +
   scale_y_continuous(limits = c(1, 10), breaks = seq(1, 10, 1))+
   scale_x_continuous(name="Income level", breaks=1:10, labels=1:10)+
   theme_minimal()
+
+# Section 6: boxplot for Education Level and Income Level
+
+# Boxplot for Education Level
+education_level_labels <- c("Less than primary", "Primary", "Lower Secondary",
+                            "Upper Secondary", "post-secondary non tertiary", 
+                            "Short-cycle tertiary", "bachelor or equivalent",
+                            "Master or equivalent", "Doctoral or equivalent") 
+
+ggplot(survey_mexico_recoded, aes(x = factor(Education_level), y = Income_level, fill = factor(Education_level))) +
+  geom_boxplot() +
+  labs(x = "Educational Level", y = "Income Level") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
+  scale_x_discrete(labels = education_level_labels)
+
+# Boxplot for Employment Status 
+employment_status_labels <- c(
+  "Full time", "Part time", "Self employed", "Retired/pensioned",
+  "Housewife", "Student", "Unemployed", "Other")
+
+ggplot(survey_mexico_recoded, aes(x = factor(Employment_status), y = Income_level, fill = factor(Employment_status))) +
+  geom_boxplot() +
+  labs(x = "Employment Status", y = "Income Level") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_x_discrete(labels = employment_status_labels)
